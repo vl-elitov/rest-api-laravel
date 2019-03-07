@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Items;
 use Illuminate\Http\Request;
+use Validator;
 
 class ItemsController extends Controller
 {
@@ -32,11 +33,27 @@ class ItemsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+
+        $validator = Validator::make($request->all(), [
+            'text' => 'required',
+            'body' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return array('response' => $validator->messages(), 'success' => false);
+        }
+
+        // Create item
+        $item = new Items;
+        $item->text = $request->input('text');
+        $item->body = $request->input('body');
+        $item->save();
+
+        return response()->json($item);
     }
 
     /**
