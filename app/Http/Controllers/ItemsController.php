@@ -84,21 +84,40 @@ class ItemsController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'text' => 'required',
+            'body' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return array('response' => $validator->messages(), 'success' => false);
+        }
+
+        // Create item
+        $item = Items::find($id);
+        $item->text = $request->input('text');
+        $item->body = $request->input('body');
+        $item->save();
+
+        return response()->json($item);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return array
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        //
+        $item = Items::find($id);
+        $item->delete();
+
+        return array('response' => 'Item deleted', 'success' => true);
     }
 }
