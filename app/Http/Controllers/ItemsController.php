@@ -39,8 +39,8 @@ class ItemsController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'text' => 'required',
-            'body' => 'required'
+            'text' => 'required|max:255',
+            'body' => 'required|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -89,8 +89,8 @@ class ItemsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'text' => 'required',
-            'body' => 'required'
+            'text' => 'required|max:255',
+            'body' => 'required|max:255'
         ]);
 
         if ($validator->fails()) {
