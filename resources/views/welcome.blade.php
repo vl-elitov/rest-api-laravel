@@ -34,10 +34,27 @@
         </ul>
     </div>
 </nav>
-
 <div class="container">
     <h1>Home</h1>
+
+    <button class="btn btn-primary" data-toggle="collapse" data-target="#demo">Add item</button>
+    <hr>
+    <div id="demo" class="collapse">
+        <form id="itemForm">
+            <div class="form-group">
+                <label>Text</label>
+                <input type="text" id="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Body</label>
+                <textarea id="body" class="form-control"></textarea>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+    </div>
+
     <ul class="items list-group"></ul>
 </div>
+
 </body>
 </html>

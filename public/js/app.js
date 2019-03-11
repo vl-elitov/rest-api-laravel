@@ -34687,17 +34687,60 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 $(document).ready(function () {
+  var api_url = 'http://rest.test/api/items/';
   getItems(); // Get items from API
 
   function getItems() {
     $.ajax({
-      url: 'http://rest.test/api/items'
+      url: api_url
     }).done(function (items) {
       var output = '';
       $.each(items, function (key, item) {
-        output += "\n              <li class=\"list-group-item\">\n                <strong>".concat(item.text, ": </strong>").concat(item.body, "\n              </li>\n            ");
+        output += "\n             <li class=\"list-group-item\">\n                <strong>".concat(item.text, ": </strong>").concat(item.body, " <a href=\"#\" class=\"deleteLink\" data-id=\"").concat(item.id, "\">Delete</a>\n              </li>\n            ");
       });
       $('.items').append(output);
+    });
+  } // Submit event
+
+
+  $('#itemForm').on('submit', function (e) {
+    e.preventDefault();
+    var text = $('#text').val();
+    var body = $('#body').val();
+    addItem(text, body);
+  }); // Delete event
+
+  $('body').on('click', '.deleteLink', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    deleteItem(id);
+  }); // Delete item through api
+
+  function deleteItem(id) {
+    $.ajax({
+      method: 'POST',
+      url: api_url + id,
+      data: {
+        _method: 'DELETE'
+      }
+    }).done(function (item) {
+      alert('Item Removed');
+      location.reload();
+    });
+  } // Insert items using api
+
+
+  function addItem(text, body) {
+    $.ajax({
+      method: 'POST',
+      url: api_url,
+      data: {
+        text: text,
+        body: body
+      }
+    }).done(function (item) {
+      alert('Item # ' + item.id + ' added');
+      location.reload();
     });
   }
 });
